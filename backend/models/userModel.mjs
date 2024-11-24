@@ -4,16 +4,15 @@ import bcrypt from 'bcryptjs';
 const addressSchema = mongoose.Schema({
   street: String,
   city: String,
-  state: String,
-  country: String,
+  province: String,
   zip: String,
 });
 
 const userSchema = mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true, },
-  role: { type: String, required: true, },
+  password: { type: String, required: true },
+  role: { type: String, enum: ['admin', 'buyer', 'seller'], default: 'buyer', required: true },
   address: addressSchema,
   order_history: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }],
   companyName: String,
