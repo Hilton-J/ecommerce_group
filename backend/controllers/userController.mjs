@@ -72,7 +72,6 @@ export const logoutUser = asyncHandler(async (req, res) => {
 // route    GET /api/users/profile
 // @access  Private (Private meaning you have to have a token to access this)
 export const getUserProfile = asyncHandler(async (req, res) => {
-
   const user = {
     _id: req.user._id,
     name: req.user.name,
