@@ -51,7 +51,7 @@ export const UpdateProduct = asyncHandler(async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: "Product created successfully",
+      message: "Product updated successfully",
       product: {
         _id: updateProduct._id,
         name: updateProduct.name,

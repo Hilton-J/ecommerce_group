@@ -1,8 +1,8 @@
 import asyncHandler from 'express-async-handler';
 import Review from '../models/reviewModel.mjs';
 
-// @dec Add a Review
-// route POST /api/review
+// @desc Add a Review
+// route POST /api/reviews
 // @access Private
 export const addReview = asyncHandler(async (req, res) => {
   const { comment, rating, product } = req.body;
@@ -32,8 +32,8 @@ export const addReview = asyncHandler(async (req, res) => {
   }
 });
 
-// @dec Delete Review
-// route DEL /api/review
+// @desc Delete Review
+// route DEL /api/reviews/:id
 // @access Private
 export const deleteReview = asyncHandler(async (req, res) => {
   const user = String(req.user._id);
@@ -49,5 +49,46 @@ export const deleteReview = asyncHandler(async (req, res) => {
   } else {
     res.status(400);
     throw Error('Review not found');
+  }
+});
+
+// @desc Update review
+// route PUT /api/reviews/:id
+//@access Private
+export const updateReview = asyncHandler(async (req, res) => {
+  const user = String(req.user._id);
+  const { id } = req.params;
+  const review = await Review.findOne({ _id: id, user });
+
+  if (review) {
+    review.comment = req.body.comment || review.comment;
+    review.rating = req.body.rating || review.rating;
+
+    const updateReview = await review.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Review updated successfully",
+      review: updateReview
+    });
+  } else {
+    res.status(400);
+    throw new Error('Review not found');
+  }
+});
+
+// @desc Get Reviews
+// route GET /api/reviews
+// @access Public
+export const getReviews = asyncHandler(async (req, res) => {
+  const reviews = await Review.find({});
+
+  if (reviews.length > 0) {
+    res.status(200).json({
+      reviews
+    })
+  } else {
+    res.status(404);
+    throw new Error('No reviews found')
   }
 });
