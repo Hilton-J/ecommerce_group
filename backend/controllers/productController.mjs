@@ -34,7 +34,7 @@ export const addProduct = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error('Invalid product data')
+    throw new Error('Invalid product data');
   }
 });
 
@@ -65,7 +65,7 @@ export const UpdateProduct = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error('Product not found')
+    throw new Error('Product not found');
   }
 });
 
