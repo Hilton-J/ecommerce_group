@@ -12,10 +12,14 @@ export const authUser = asyncHandler(async (req, res) => {
   if (user && (await user.matchPassword(password))) {
     generateToken(res, user._id);
     res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role
+      success: true,
+      message: 'User logged in successfully',
+      data: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      }
     });
   } else {
     res.status(400);
@@ -45,10 +49,14 @@ export const registerUser = asyncHandler(async (req, res) => {
   if (user) {
     generateToken(res, user._id);
     res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role
+      success: true,
+      message: "User added successfully",
+      data: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      }
     });
   } else {
     res.status(400);
@@ -65,7 +73,7 @@ export const logoutUser = asyncHandler(async (req, res) => {
     expires: new Date(0)
 
   });
-  res.status(200).json({ message: 'User logged Out' })
+  res.status(200).json({ success: true, message: 'User logged Out' })
 });
 
 // @dsc     Get user profile
@@ -77,9 +85,9 @@ export const getUserProfile = asyncHandler(async (req, res) => {
     name: req.user.name,
     email: req.user.email,
     role: req.user.role,
-  }
+  };
 
-  res.status(200).json(user);
+  res.status(200).json({ success: true, data: user });
 });
 
 // @dsc     Update user profile
@@ -98,17 +106,20 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 
     const updatedUser = await user.save();
     res.status(200).json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      role: updatedUser.role,
+      success: true,
+      message: 'User updated successfully',
+      data: {
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        role: updatedUser.role,
+      }
     });
 
   } else {
     res.status(404);
     throw new Error('User not found')
   }
-  res.status(200).json({ message: 'Update User Profile' })
 });
 
 // @dsc     Get all users
@@ -138,3 +149,27 @@ export const getAllUsers = asyncHandler(async (req, res) => {
     throw new Error('No users found');
   }
 });
+
+// @dsc     Delete user
+// route    DELETE /api/users
+// @access  Private
+export const deleteUser = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const user = await User.findByIdAndDelete(id);
+
+  if (user) {
+    res.status(200).json({
+      success: true,
+      message: "User deleted successfully",
+      data: {
+        _id: user._id,
+        name: user.name,
+        role: user.role
+      }
+    })
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+})

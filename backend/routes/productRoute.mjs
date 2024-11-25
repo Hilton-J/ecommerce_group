@@ -1,9 +1,11 @@
 import express from 'express';
-import { addProduct } from '../controllers/productController.mjs';
+import { addProduct, getAllProducts, getSellerProducts, UpdateProduct } from '../controllers/productController.mjs';
 import { authorizeRoles, protect } from '../middleware/authMiddleware.mjs';
 
 const router = express.Router();
 
-router.post('/', protect, authorizeRoles('admin'), addProduct);
+router.route('/').post(protect, authorizeRoles('admin', 'seller'), addProduct).get(protect, authorizeRoles('admin'), getAllProducts);
+router.get('/seller', protect, authorizeRoles('seller'), getSellerProducts);
+router.put('/:id', protect, authorizeRoles('admin', 'seller'), UpdateProduct);
 
 export default router;

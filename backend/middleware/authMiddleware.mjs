@@ -28,7 +28,7 @@ const authorizeRoles = (...roles) => {
       next();
     } else {
       res.status(403);
-      throw new Error('Not authorized, admin only');
+      throw new Error('Not authorized');
     }
   };
 };
