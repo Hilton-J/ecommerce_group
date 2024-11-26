@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import userRoutes from './routes/userRoute.mjs';
 import productRoutes from './routes/productRoute.mjs';
+import categoryRoutes from './routes/categoryRoute.mjs';
 import { errorHandler, notFound } from './middleware/errorMiddelware.mjs';
 import connectDB from './config/db.mjs';
 import cookieParser from 'cookie-parser';
@@ -17,6 +18,7 @@ app.use(cookieParser());
 
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/categories', categoryRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

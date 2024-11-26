@@ -11,7 +11,7 @@ const productSchema = mongoose.Schema({
   description: { type: String, required: true },
   price: { type: Number, requied: true },
   stock: { type: Number, default: 0 },
-  category: { type: Number, required: true },
+  category: { type: String, enum:['Sports','Electronics','Home','Accessories'], required: true },
   image: [String],
   seller: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   rating: { type: Number, min: 0, max: 5 },
