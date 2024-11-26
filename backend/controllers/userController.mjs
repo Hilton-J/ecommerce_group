@@ -151,7 +151,7 @@ export const getAllUsers = asyncHandler(async (req, res) => {
 });
 
 // @dsc     Delete user
-// route    DELETE /api/users
+// route    DEL /api/users
 // @access  Private
 export const deleteUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
