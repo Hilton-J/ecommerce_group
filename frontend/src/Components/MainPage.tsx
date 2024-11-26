@@ -9,9 +9,9 @@ import { Link } from 'react-router-dom';
 
 const MainPage = () => {
  
-  const [carLiked, setCarLiked] = useState(false);
-  const [headphoneLiked, setHeadphoneLiked] = useState(false);
-  const [steakLiked, setSteakLiked] = useState(false);
+  const [carLiked, setCarLiked] = useState(true);
+  const [headphoneLiked, setHeadphoneLiked] = useState(true);
+  const [steakLiked, setSteakLiked] = useState(true);
 
  
   const handleLikeToggle = (product:any) => {

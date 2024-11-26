@@ -70,7 +70,7 @@ const ProductViewer = () => {
               <h3 className='text-lg font-semibold text-gray-800'>Location</h3>
               <p className='text-sm text-gray-600'>View on Google Map</p>
               <div className='bg-gray-200 w-full h-48 rounded-lg mt-2'>
-                {/* Insert a map here */}
+                {/* map here will try google */}
               </div>
             </div>
           </div>
