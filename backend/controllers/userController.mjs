@@ -7,11 +7,16 @@ import generateToken from "../utils/generateToken.mjs";
 // access   public
 export const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+
+  
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
+    
     generateToken(res, user._id);
-    res.status(201).json({
+
+    
+    res.status(200).json({
       success: true,
       message: 'User logged in successfully',
       data: {
@@ -23,15 +28,17 @@ export const authUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error('Invalid email or password')
+    throw new Error('Invalid email or password');
   }
 });
 
-// @dsc     Register a new user
+// @desc     Register a new user
 // route    POST /api/users
-// @access  Public
+// @access   Public
 export const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password, role, companyName, companyRegistration, address } = req.body;
+
+  
   const userExists = await User.findOne({ email });
 
   if (userExists) {
@@ -39,46 +46,62 @@ export const registerUser = asyncHandler(async (req, res) => {
     throw new Error('User already exists');
   }
 
+ 
+  if (role === 'seller' && (!companyName || !companyRegistration || !address)) {
+    res.status(400);
+    throw new Error('Please provide all required seller fields.');
+  }
+
+
   const user = await User.create({
     name,
     email,
     password,
-    role
+    role,
+    companyName,
+    companyRegistration,
+    address
   });
 
   if (user) {
+
     generateToken(res, user._id);
+
+   
     res.status(201).json({
       success: true,
-      message: "User added successfully",
+      message: "User registered successfully",
       data: {
         _id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        companyName: user.companyName,
+        companyRegistration: user.companyRegistration,
+        address: user.address
       }
     });
   } else {
     res.status(400);
-    throw new Error('Invalid user data')
+    throw new Error('Invalid user data');
   }
 });
 
-// @dsc     Logout user
+// @desc     Logout user
 // route    POST /api/users/logout
-// @access  Public
+// @access   Public
 export const logoutUser = asyncHandler(async (req, res) => {
   res.cookie('jwt', '', {
     httpOnly: true,
-    expires: new Date(0)
-
+    expires: new Date(0) // Set cookie expiration to the past to clear the token
   });
-  res.status(200).json({ success: true, message: 'User logged Out' })
+
+  res.status(200).json({ success: true, message: 'User logged out' });
 });
 
-// @dsc     Get user profile
+// @desc     Get user profile
 // route    GET /api/users/profile
-// @access  Private (Private meaning you have to have a token to access this)
+// @access   Private (Requires valid JWT token)
 export const getUserProfile = asyncHandler(async (req, res) => {
   const user = {
     _id: req.user._id,
@@ -90,9 +113,9 @@ export const getUserProfile = asyncHandler(async (req, res) => {
   res.status(200).json({ success: true, data: user });
 });
 
-// @dsc     Update user profile
+// @desc     Update user profile
 // route    PUT /api/users/profile
-// @access  Private
+// @access   Private (Requires valid JWT token)
 export const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
@@ -102,7 +125,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 
     if (req.body.password) {
       user.password = req.body.password;
-    };
+    }
 
     const updatedUser = await user.save();
     res.status(200).json({
@@ -115,25 +138,21 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
         role: updatedUser.role,
       }
     });
-
   } else {
     res.status(404);
-    throw new Error('User not found')
+    throw new Error('User not found');
   }
 });
 
-// @dsc     Get all users
+// @desc     Get all users
 // route    GET /api/users
-// @access  Private
+// @access   Private (Admin access required)
 export const getAllUsers = asyncHandler(async (req, res) => {
   const page = Number(req.query.page) || 1;
   const limit = 20;
   const skip = (page - 1) * limit;
 
-  const users = await User.find({})
-    .select('-password')
-    .skip(skip)
-    .limit(limit);
+  const users = await User.find({}).select('-password').skip(skip).limit(limit);
 
   const totalUsers = await User.countDocuments();
 
@@ -150,9 +169,9 @@ export const getAllUsers = asyncHandler(async (req, res) => {
   }
 });
 
-// @dsc     Delete user
-// route    DEL /api/users
-// @access  Private
+// @desc     Delete user
+// route    DELETE /api/users/:id
+// @access   Private (Admin access required)
 export const deleteUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -167,9 +186,9 @@ export const deleteUser = asyncHandler(async (req, res) => {
         name: user.name,
         role: user.role
       }
-    })
+    });
   } else {
     res.status(404);
     throw new Error('User not found');
   }
-})
+});

@@ -1,31 +1,56 @@
 import React, { useState } from 'react';
 import { FaGoogle, FaFacebook } from 'react-icons/fa';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login: React.FC = () => {
   const [emailOrPhone, setEmailOrPhone] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
 
-  
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-   
     if (!emailOrPhone || !password) {
       setError('Please fill in both fields.');
       return;
     }
 
-   
-    setError('');
-    alert('Logged in successfully');
+    const userData = { email: emailOrPhone, password: password };
+
+    try {
+      const response = await fetch('http://localhost:9000/api/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Include cookies
+        body: JSON.stringify(userData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data.data);
+        localStorage.setItem('_id', data.data._id);
+        localStorage.setItem('role', data.role);
+       // console.log(localStorage.getItem('_id'));
+        toast.success('Login successful');
+        setError(''); 
+      } else {
+        const errorData = await response.json();
+        toast.error(errorData.message || 'Login failed. Please try again.');
+        setError('Login failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+      toast.error('An unexpected error occurred. Please try again.');
+      setError('An unexpected error occurred. Please try again.');
+    }
   };
 
- 
   const handleGoogleLogin = () => {
     alert('Google login clicked');
   };
-
 
   const handleFacebookLogin = () => {
     alert('Facebook login clicked');
@@ -44,19 +69,23 @@ const Login: React.FC = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="emailOrPhone" className="block text-sm text-gray-600">Email or Phone Number</label>
+            <label htmlFor="emailOrPhone" className="block text-sm text-gray-600">
+              Email or Phone
+            </label>
             <input
               type="text"
               id="emailOrPhone"
               value={emailOrPhone}
               onChange={(e) => setEmailOrPhone(e.target.value)}
               className="w-full p-3 border border-gray-300 rounded-lg"
-              placeholder="Enter your email or phone number"
+              placeholder="Enter your email or phone"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm text-gray-600">Password</label>
+            <label htmlFor="password" className="block text-sm text-gray-600">
+              Password
+            </label>
             <input
               type="password"
               id="password"
@@ -68,7 +97,9 @@ const Login: React.FC = () => {
           </div>
 
           <div className="flex justify-end mt-2">
-            <a href="/forgot-password" className="text-sm text-blue-500 hover:underline">Forgot password?</a>
+            <a href="/forgot-password" className="text-sm text-blue-500 hover:underline">
+              Forgot password?
+            </a>
           </div>
 
           <div className="mt-6">
@@ -87,8 +118,7 @@ const Login: React.FC = () => {
           <div className="border-t border-gray-300 w-full"></div>
         </div>
 
-        <div className=" mt-6 space-y-4">
-    
+        <div className="mt-6 space-y-4">
           <button
             onClick={handleGoogleLogin}
             className="w-full py-3 bg-red-500 text-white rounded-lg flex items-center justify-center hover:bg-red-600 transition duration-300"
@@ -96,7 +126,6 @@ const Login: React.FC = () => {
             <FaGoogle className="mr-2" /> Login with Google
           </button>
 
-   
           <button
             onClick={handleFacebookLogin}
             className="w-full py-3 bg-blue-600 text-white rounded-lg flex items-center justify-center hover:bg-blue-700 transition duration-300"
@@ -108,10 +137,15 @@ const Login: React.FC = () => {
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-500">
             Don't have an account?{' '}
-            <a href="/register" className="text-blue-500 hover:underline">Sign Up</a>
+            <a href="/register" className="text-blue-500 hover:underline">
+              Sign Up
+            </a>
           </p>
         </div>
       </div>
+
+      {/* Toast notifications */}
+      <ToastContainer />
     </div>
   );
 };

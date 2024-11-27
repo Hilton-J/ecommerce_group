@@ -13,7 +13,7 @@ const Navbar = () => {
           Log In
         </Link>
         <Link to={'Register'} className='bg-blue-500 hover:bg-blue-600 transition duration-300 text-white py-2 px-6 rounded-lg shadow-md cursor-pointer'>
-          Sign In
+          Sign Up
         </Link>
       </div>
     </div>

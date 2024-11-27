@@ -7,7 +7,8 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Login from './Components/Login'
 import Register from './Components/Register'
 import ProductViewer from './Components/ProductViewer'
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function App() {
   
 

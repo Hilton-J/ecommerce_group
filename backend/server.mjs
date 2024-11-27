@@ -6,11 +6,15 @@ import reviewRoutes from './routes/reviewRoute.mjs';
 import { errorHandler, notFound } from './middleware/errorMiddelware.mjs';
 import connectDB from './config/db.mjs';
 import cookieParser from 'cookie-parser';
-
+import cors from 'cors'
 dotenv.config();
 
 const port = process.env.PORT || 5000;
 const app = express();
+app.use(cors({
+  origin: true, // Allows any origin
+  credentials: true, // Allow cooki
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
