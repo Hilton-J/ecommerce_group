@@ -1,8 +1,8 @@
-import asyncHandler from "express-async-handler";
-import Product from '../models/productModel.mjs'
+import asyncHandler from 'express-async-handler';
+import Product from '../models/productModel.mjs';
 
 // @dsc     Add new Product
-// route    POST /api/products, accessable to 
+// route    POST /api/products
 // @access  Private
 export const addProduct = asyncHandler(async (req, res) => {
   const { name, description, price, stock, category, image } = req.body;
@@ -34,7 +34,7 @@ export const addProduct = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error('Invalid product data')
+    throw new Error('Invalid product data');
   }
 });
 
@@ -51,7 +51,7 @@ export const UpdateProduct = asyncHandler(async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: "Product created successfully",
+      message: "Product updated successfully",
       product: {
         _id: updateProduct._id,
         name: updateProduct.name,
@@ -65,7 +65,7 @@ export const UpdateProduct = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error('Product not found')
+    throw new Error('Product not found');
   }
 });
 
@@ -105,9 +105,7 @@ export const getSellerProducts = asyncHandler(async (req, res) => {
   const limit = 20;
   const skip = (page - 1) * limit;
 
-  const products = await Product.find({ seller })
-    .skip(skip)
-    .limit(limit);
+  const products = await Product.find({ seller }).skip(skip).limit(limit);
 
   const totalProducts = await Product.countDocuments({ seller });
 
@@ -121,5 +119,25 @@ export const getSellerProducts = asyncHandler(async (req, res) => {
   } else {
     res.status(404);
     throw new Error('No products found');
+  }
+});
+
+// @dsc     Delete Product
+// route    DEL /api/products
+// @access  Private
+export const deleteProduct = asyncHandler(async (req, res) => {
+  const seller = String(req.user._id);
+  const { id } = req.params;
+  const product = await Product.findOneAndDelete({ _id: id, seller });
+
+  if (product) {
+    res.status(200).json({
+      success: true,
+      message: 'Product deleted successfully',
+      data: product
+    });
+  } else {
+    res.status(404);
+    throw new Error('Product not found');
   }
 });
