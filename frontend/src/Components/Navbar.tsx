@@ -6,7 +6,16 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const userId = localStorage.getItem('_id');
-
+  const [menuOpen, setMenuOpen] = useState(false);
+    
+  const toggleMenu = () => {
+      setMenuOpen(!menuOpen);
+      if (!menuOpen) {
+          setTimeout(() => {
+              setMenuOpen(false);
+          }, 10000); // 10 seconds
+      }
+  };
   useEffect(() => {
     
     if (userId) {
@@ -50,12 +59,20 @@ const Navbar = () => {
   };
 
   return (
-    <div className='flex justify-between items-center px-6 py-6 bg-white shadow-lg rounded-lg border border-gray-300'>
-      <Link to='/' className='bg-blue-600 p-4 rounded-lg shadow-md'>
-        <h1 className='text-3xl font-semibold text-white'>Local Market</h1>
+    <div className='flex justify-between items-center px-6 py-6 bg-white shadow-lg rounded-lg border border-gray-300 w-full'>
+      <Link to='/' className='bg-blue-600 p-4 rounded-lg shadow-md  md:w-52 text-center'>
+        <h1 className=' lg:text-xl font-semibold text-white'>Local Market</h1>
       </Link>
       <ToastContainer />
-      <div className='flex gap-2 items-center space-x-4 md:space-x-8'>
+      <button 
+                        className="text-blue-500 text-3xl lg:hidden focus:outline-none"
+                        onClick={toggleMenu}
+                        aria-expanded={menuOpen}
+                        aria-controls="nav-menu"
+                    >
+                        &#9776;
+   </button>
+      <div className={`flex gap-2 items-center space-x-4 md:space-x-8 ${menuOpen ? 'block' : 'hidden'} lg:block`}>
         {isLoggedIn ? (
           <button
             onClick={handleLogout}
@@ -65,6 +82,10 @@ const Navbar = () => {
           </button>
         ) : (
           <>
+           <div className='flex  flex-col gap-2 md:flex-row'>
+
+
+           
             <Link
               to='/login'
               className='bg-green-500 hover:bg-green-600 transition duration-300 text-white py-2 px-6 rounded-lg shadow-md cursor-pointer'
@@ -77,6 +98,7 @@ const Navbar = () => {
             >
               Sign Up
             </Link>
+            </div>
           </>
         )}
       </div>

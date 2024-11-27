@@ -9,6 +9,7 @@ import Register from './Components/Register'
 import ProductViewer from './Components/ProductViewer'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Footer from './Components/Footer'
 function App() {
   
 
@@ -26,6 +27,7 @@ function App() {
               </>
              }/>
            </Routes>
+           <Footer/>
        </Router>
   
       

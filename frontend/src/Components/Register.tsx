@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FaGoogle, FaFacebook } from 'react-icons/fa'; 
+import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -18,6 +19,7 @@ const Register = () => {
     province: '',
     zip: '',
   });
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
 
   const handleGoogleLogin = () => {
@@ -30,7 +32,7 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     // Basic validations
     if (password !== confirmPassword) {
       setError('Passwords do not match');
@@ -57,6 +59,7 @@ const Register = () => {
       if (response.ok) {
         const data = await response.json();
         toast.success(data.name || 'Registration successful');
+         navigate('/login');
       } else {
         const errorData = await response.json();
         toast.error(errorData.message || 'Registration failed. Please try again.');
