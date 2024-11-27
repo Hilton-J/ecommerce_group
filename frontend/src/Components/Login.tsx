@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FaGoogle, FaFacebook } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -7,7 +8,7 @@ const Login: React.FC = () => {
   const [emailOrPhone, setEmailOrPhone] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
-
+  const navigate = useNavigate();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -27,14 +28,15 @@ const Login: React.FC = () => {
         credentials: 'include', // Include cookies
         body: JSON.stringify(userData),
       });
-
+           
       if (response.ok) {
         const data = await response.json();
         console.log(data.data);
         localStorage.setItem('_id', data.data._id);
-        localStorage.setItem('role', data.role);
-       // console.log(localStorage.getItem('_id'));
+        localStorage.setItem('role', data.data.role);
+ ;
         toast.success('Login successful');
+        navigate('/');
         setError(''); 
       } else {
         const errorData = await response.json();
