@@ -34,7 +34,8 @@ const Login: React.FC = () => {
         console.log(data.data);
         localStorage.setItem('_id', data.data._id);
         localStorage.setItem('role', data.data.role);
- ;
+        localStorage.setItem('UserData', data.data);
+        console.log(localStorage.getItem('UserData'));
         toast.success('Login successful');
         navigate('/');
         setError(''); 

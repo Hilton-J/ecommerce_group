@@ -23,7 +23,8 @@ export const authUser = asyncHandler(async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        
       }
     });
   } else {

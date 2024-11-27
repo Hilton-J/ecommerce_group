@@ -8,12 +8,11 @@ import Steak from '../assets/steak.jpg';
 import { Link } from 'react-router-dom';
 
 const MainPage = () => {
- 
+
   const [carLiked, setCarLiked] = useState(true);
   const [headphoneLiked, setHeadphoneLiked] = useState(true);
   const [steakLiked, setSteakLiked] = useState(true);
 
- 
   const handleLikeToggle = (product:any) => {
     if (product === 'car') {
       setCarLiked(!carLiked);
@@ -26,32 +25,62 @@ const MainPage = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen flex justify-center items-start py-10">
-      <div className="max-w-screen-xl w-full flex justify-between gap-10">
+      <div className="max-w-screen-xl w-full flex flex-col lg:flex-row justify-between gap-10">
         
-        <div className="w-1/4 bg-white rounded-lg shadow-lg p-6">
-          <div className="flex items-center space-x-4 mb-8">
-            <img src={searchIcon} alt="search" className="h-12 w-12" />
-            <p className="text-lg font-semibold text-gray-800">Search on Marketplace</p>
-          </div>
+      <div className="w-full lg:w-1/4 bg-white rounded-lg shadow-lg p-6 space-y-6">
+  <h2 className="text-2xl font-semibold text-gray-800">Categories</h2>
+  <div className="space-y-4">
+    <div className="category-item">
+      <div className="text-lg font-medium text-gray-600 cursor-pointer hover:text-blue-600 transition-colors duration-300 hover:pl-2">
+        Cars
+      </div>
+    </div>
+    <div className="category-item">
+      <div className="text-lg font-medium text-gray-600 cursor-pointer hover:text-blue-600 transition-colors duration-300 hover:pl-2">
+        Electronics
+      </div>
+    </div>
+    <div className="category-item">
+      <div className="text-lg font-medium text-gray-600 cursor-pointer hover:text-blue-600 transition-colors duration-300 hover:pl-2">
+        Entertainment
+      </div>
+    </div>
+    <div className="category-item">
+      <div className="text-lg font-medium text-gray-600 cursor-pointer hover:text-blue-600 transition-colors duration-300 hover:pl-2">
+        Rent
+      </div>
+    </div>
+    <div className="category-item">
+      <div className="text-lg font-medium text-gray-600 cursor-pointer hover:text-blue-600 transition-colors duration-300 hover:pl-2">
+        Food
+      </div>
+    </div>
+    <div className="category-item">
+      <div className="text-lg font-medium text-gray-600 cursor-pointer hover:text-blue-600 transition-colors duration-300 hover:pl-2">
+        Sports
+      </div>
+    </div>
+    <div className="category-item">
+      <div className="text-lg font-medium text-gray-600 cursor-pointer hover:text-blue-600 transition-colors duration-300 hover:pl-2">
+        Accessories
+      </div>
+    </div>
+    <div className="category-item">
+      <div className="text-lg font-medium text-gray-600 cursor-pointer hover:text-blue-600 transition-colors duration-300 hover:pl-2">
+        Home
+      </div>
+    </div>
+  </div>
+</div>
 
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold text-gray-700">Categories</h2>
-            <div className="flex flex-col space-y-2">
-              <div className="text-md text-gray-600 cursor-pointer hover:text-blue-500">Cars</div>
-              <div className="text-md text-gray-600 cursor-pointer hover:text-blue-500">Electronics</div>
-              <div className="text-md text-gray-600 cursor-pointer hover:text-blue-500">Entertainment</div>
-              <div className="text-md text-gray-600 cursor-pointer hover:text-blue-500">Rent</div>
-            </div>
-          </div>
-        </div>
 
-       
-        <div className="w-3/4 flex flex-wrap gap-8">
-          <div  className="w-72 bg-white rounded-lg shadow-md overflow-hidden">
-          <Link  to='/Description' >
-          <img src={Car} alt="Car" className="w-full h-52 object-cover" />
+  
+        <div className="w-full lg:w-3/4 flex flex-wrap gap-8 justify-center">
+          
+          <div className="w-full sm:w-72 md:w-80 lg:w-72 bg-white rounded-lg shadow-md overflow-hidden">
+            <Link to='/Description'>
+              <img src={Car} alt="Car" className="w-full h-52 object-cover" />
             </Link>
-           
             <div className="p-4 flex justify-between items-center">
               <p className="text-lg font-semibold text-gray-800">R 45 000.99</p>
               <img
@@ -75,10 +104,11 @@ const MainPage = () => {
             </div>
           </div>
 
-          <div  className="w-72 bg-white rounded-lg shadow-md overflow-hidden">
-           <Link  to='/Description' >
-           <img src={headphone} alt="Headphone" className="w-full h-52 object-cover" />
-           </Link> 
+         
+          <div className="w-full sm:w-72 md:w-80 lg:w-72 bg-white rounded-lg shadow-md overflow-hidden">
+            <Link to='/Description'>
+              <img src={headphone} alt="Headphone" className="w-full h-52 object-cover" />
+            </Link>
             <div className="p-4 flex justify-between items-center">
               <p className="text-lg font-semibold text-gray-800">R 305.99</p>
               <img
@@ -101,11 +131,11 @@ const MainPage = () => {
             </div>
           </div>
 
-          <div  className="w-72 bg-white rounded-lg shadow-md overflow-hidden">
-            <Link to='/Description' >
-            <img src={Steak} alt="Steak" className="w-full h-52 object-cover" />
+        
+          <div className="w-full sm:w-72 md:w-80 lg:w-72 bg-white rounded-lg shadow-md overflow-hidden">
+            <Link to='/Description'>
+              <img src={Steak} alt="Steak" className="w-full h-52 object-cover" />
             </Link>
-            
             <div className="p-4 flex justify-between items-center">
               <p className="text-lg font-semibold text-gray-800">R 60.99</p>
               <img
@@ -127,6 +157,7 @@ const MainPage = () => {
               <p className="text-sm text-gray-500">Johannesburg, Gauteng</p>
             </div>
           </div>
+
         </div>
       </div>
     </div>

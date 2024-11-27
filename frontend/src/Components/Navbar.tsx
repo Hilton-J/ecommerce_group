@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AddProductForm from './AddProductForm';
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
@@ -57,7 +58,7 @@ const Navbar = () => {
       toast.error('An unexpected error occurred. Please try again.');
     }
   };
-
+  localStorage.getItem('role'); //seller or admin
   return (
     <div className='flex justify-between items-center px-6 py-6 bg-white shadow-lg rounded-lg border border-gray-300 w-full'>
       <Link to='/' className='bg-blue-600 p-4 rounded-lg shadow-md  md:w-52 text-center'>
@@ -72,20 +73,27 @@ const Navbar = () => {
                     >
                         &#9776;
    </button>
-      <div className={`flex gap-2 items-center space-x-4 md:space-x-8 ${menuOpen ? 'block' : 'hidden'} lg:block`}>
+      <div className={`flex gap-2 items-center space-x-4 md:space-x-8 ${menuOpen ? 'block' : 'hidden'} lg:block `}>
         {isLoggedIn ? (
-          <button
+            <div className='flex  flex-col gap-10 md:flex-row w-full'> 
+            {( localStorage.getItem('role') === 'seller' || localStorage.getItem('role') === 'admin') && <AddProductForm />}
+            <button
             onClick={handleLogout}
             className='bg-red-500 hover:bg-red-600 transition duration-300 text-white py-2 px-6 rounded-lg shadow-md cursor-pointer'
           >
             Logout
-          </button>
+          </button> 
+          
+           </div>
+          
+        
         ) : (
+          
           <>
            <div className='flex  flex-col gap-2 md:flex-row'>
 
-
            
+             
             <Link
               to='/login'
               className='bg-green-500 hover:bg-green-600 transition duration-300 text-white py-2 px-6 rounded-lg shadow-md cursor-pointer'
