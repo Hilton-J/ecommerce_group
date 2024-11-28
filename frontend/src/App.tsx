@@ -11,19 +11,19 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from './Components/Footer'
 function App() {
-  
-
   return (
     <>
-       <Router>
-       <Navbar/>
-           <Routes>
-            <Route path='/Login' element={<Login/>}/>
-            <Route path='/Register' element={<Register/>}/>
-            <Route path='/Description' element={<ProductViewer/>}/>
-             <Route path="*" element= {
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path='/Login' element={<Login />} />
+          <Route path='/Register' element={<Register />} />
+          <Route path='/Description' element={<ProductViewer />} />
+          <Route
+            path='*'
+            element={
               <>
-                  <MainPage />
+                <MainPage />
               </>
              }/>
            </Routes>
@@ -33,7 +33,7 @@ function App() {
       
       
     </>
-  )
+  );
 }
 
-export default App
+export default App;
