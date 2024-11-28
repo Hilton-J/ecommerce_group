@@ -15,17 +15,13 @@ export const authUser = asyncHandler(async (req, res) => {
 
   if (user && (await user.matchPassword(password))) {
     const token = generateToken(res, user._id); // Generate the token (this will set the cookie)
-    
+
     res.status(200).json({
-      success: true,
-      message: 'User logged in successfully',
-      data: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        token // Return the token as part of the response
-      }
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      token // Return the token as part of the response
     });
   } else {
     res.status(400);
@@ -42,7 +38,7 @@ export const authUser = asyncHandler(async (req, res) => {
 export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, role, companyName, companyRegistration, address } = req.body;
 
-  
+
   const userExists = await User.findOne({ email });
 
   if (userExists) {
@@ -50,7 +46,7 @@ export const registerUser = asyncHandler(async (req, res) => {
     throw new Error('User already exists');
   }
 
- 
+
   if (role === 'seller' && (!companyName || !companyRegistration || !address)) {
     res.status(400);
     throw new Error('Please provide all required seller fields.');
@@ -71,7 +67,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 
     generateToken(res, user._id);
 
-   
+
     res.status(201).json({
       success: true,
       message: "User registered successfully",

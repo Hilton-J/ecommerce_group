@@ -2,10 +2,10 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 const addressSchema = mongoose.Schema({
-  street: { type: String, required: true },
-  city: { type: String, required: true },
-  province: { type: String, required: true },
-  zip: { type: String, required: true },
+  street: { type: String },
+  city: { type: String},
+  province: { type: String },
+  zip: { type: String },
 });
 
 const userSchema = mongoose.Schema({
