@@ -4,8 +4,9 @@ import Product from '../models/productModel.mjs';
 // @dsc     Add new Product
 // route    POST /api/products
 // @access  Private
+
 export const addProduct = asyncHandler(async (req, res) => {
-  const { name, description, price, stock, category, image } = req.body;
+  const { name, description, price, stock, category, image,seller } = req.body;
 
   const product = await Product.create({
     name,
@@ -14,7 +15,7 @@ export const addProduct = asyncHandler(async (req, res) => {
     stock,
     category,
     image,
-    seller: req.user._id,
+    seller
   });
 
   if (product) {
