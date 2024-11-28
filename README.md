@@ -14,3 +14,5 @@ This project uses the following main packages:
 - Nodemon: npm i -D nodemon
 - Asynchandler: npm i express-async-handler
 - Concurrently: npm i concurrently
+- Redux: npm i @reduxjs/toolkit react-redux
+- React Toastify: npm i react-toastify
