@@ -1,60 +1,73 @@
 import React, { useState } from 'react';
 
-interface FormData {
-  name: string;
-  price: number;
-  category: string;
-  description: string;
-  stock: number;
-  image: File | null;
-}
-
 const AddProductForm: React.FC = () => {
+  // Individual state variables for each form field
+  const [name, setName] = useState<string>('');
+  const [price, setPrice] = useState<number>(0);
+  const [category, setCategory] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [stock, setStock] = useState<number>(0);
+  const [image, setImage] = useState<File | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [formData, setFormData] = useState<FormData>({
-    name: '',
-    price: 0,
-    category: '',
-    description: '',
-    stock: 0,
-    image: null,
-  });
 
   // Handle input field changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: name === 'price' || name === 'stock' ? parseFloat(value) : value, 
-    }));
+    switch (name) {
+      case 'name':
+        setName(value);
+        break;
+      case 'price':
+        setPrice(parseFloat(value));
+        break;
+      case 'category':
+        setCategory(value);
+        break;
+      case 'description':
+        setDescription(value);
+        break;
+      case 'stock':
+        setStock(parseFloat(value));
+        break;
+      default:
+        break;
+    }
   };
 
-  // Handle file input change
+  // Handle file input change (image file)
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]; 
-    setFormData((prevState) => ({
-      ...prevState,
-      image: file ?? null, 
-    }));
+    const file = e.target.files?.[0] ?? null;
+    setImage(file);
   };
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
-    const formDataToSend = new FormData();
-    formDataToSend.append('name', formData.name);
-    formDataToSend.append('description', formData.description);
-    formDataToSend.append('price', formData.price.toString());
-    formDataToSend.append('stock', formData.stock.toString());
-    formDataToSend.append('category', formData.category);
-    formDataToSend.append('seller', localStorage.getItem('_id') || '');  // Assuming the seller's ID is stored in localStorage
-  
-    // Attach the image if present
-    if (formData.image) {
-      formDataToSend.append('image', formData.image);
+
+    // Ensure required fields are filled out
+    if (!name || !price || !stock || !category || !description) {
+      alert('Please fill in all required fields.');
+      return;
     }
-  
+
+    // Get seller's ID from localStorage
+    const sellerId = localStorage.getItem('_id');
+    if (!sellerId) {
+      alert('No seller ID found in localStorage. Please log in.');
+      return;
+    }
+
+    // Prepare data to send (including image as Base64)
+    const data = {
+      name,
+      description,
+      price,
+      stock,
+      category,
+      seller: sellerId,
+      image: image ? await convertImageToBase64(image) : null, // Convert image to Base64 if present
+    };
+
     // Get the token from localStorage
     const token = localStorage.getItem('token');
     if (!token) {
@@ -66,24 +79,37 @@ const AddProductForm: React.FC = () => {
       const response = await fetch('http://localhost:9000/api/products/', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,  // Attach token in Authorization header
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json', // Send JSON data
         },
-        body: formDataToSend,  // Use FormData to send the data (for file upload)
+        body: JSON.stringify(data), // Send data as JSON
       });
 
       if (!response.ok) {
         const errorResponse = await response.json();
-        console.error('Error Response:', errorResponse);  // Log error response
+        console.error('Error Response:', errorResponse);
         throw new Error('Error adding product');
       }
 
       const result = await response.json();
-      alert(result.message);  // Show success message
-      closeModal();  // Close the modal after successful submission
+      alert(result.message); // Show success message
+      closeModal(); // Close the modal after successful submission
     } catch (error) {
       console.error(error);
       alert('Error adding product. Please try again later.');
     }
+  };
+
+  // Function to convert image file to Base64
+  const convertImageToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(reader.result as string);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file); // Convert the image to a Base64 string
+    });
   };
 
   // Open the modal
@@ -92,14 +118,12 @@ const AddProductForm: React.FC = () => {
   // Close the modal and reset form data
   const closeModal = () => {
     setIsModalOpen(false);
-    setFormData({
-      name: '',
-      price: 0,
-      category: '',
-      description: '',
-      stock: 0,
-      image: null,
-    });
+    setName('');
+    setPrice(0);
+    setCategory('');
+    setDescription('');
+    setStock(0);
+    setImage(null);
   };
 
   return (
@@ -144,7 +168,7 @@ const AddProductForm: React.FC = () => {
                     id="name"
                     name="name"
                     className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
-                    value={formData.name}
+                    value={name}
                     onChange={handleChange}
                     required
                   />
@@ -157,7 +181,7 @@ const AddProductForm: React.FC = () => {
                     id="price"
                     name="price"
                     className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
-                    value={formData.price}
+                    value={price}
                     onChange={handleChange}
                     required
                   />
@@ -169,7 +193,7 @@ const AddProductForm: React.FC = () => {
                     id="category"
                     name="category"
                     className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
-                    value={formData.category}
+                    value={category}
                     onChange={handleChange}
                     required
                   >
@@ -190,7 +214,7 @@ const AddProductForm: React.FC = () => {
                     id="description"
                     name="description"
                     className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
-                    value={formData.description}
+                    value={description}
                     onChange={handleChange}
                     required
                   />
@@ -204,11 +228,10 @@ const AddProductForm: React.FC = () => {
                     name="image"
                     className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
                     onChange={handleFileChange}
-                    required
                   />
-                  {formData.image && (
+                  {image && (
                     <img
-                      src={URL.createObjectURL(formData.image)}
+                      src={URL.createObjectURL(image)}
                       alt="Product Preview"
                       className="mt-2 w-24 h-24 object-cover"
                     />
@@ -222,7 +245,7 @@ const AddProductForm: React.FC = () => {
                     id="stock"
                     name="stock"
                     className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
-                    value={formData.stock}
+                    value={stock}
                     onChange={handleChange}
                     required
                   />
