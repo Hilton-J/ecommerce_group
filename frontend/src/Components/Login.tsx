@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { FaGoogle, FaFacebook } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,6 +8,7 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
   const navigate = useNavigate();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -25,20 +25,23 @@ const Login: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include', // Include cookies
+        credentials: 'include', // Include cookies (JWT token)
         body: JSON.stringify(userData),
       });
-           
+
       if (response.ok) {
         const data = await response.json();
         console.log(data.data);
+
+        // Store JWT token in localStorage
+        localStorage.setItem('token', data.data.token); // Save JWT token
         localStorage.setItem('_id', data.data._id);
         localStorage.setItem('role', data.data.role);
-        localStorage.setItem('UserData', data.data);
-        console.log(localStorage.getItem('UserData'));
+        localStorage.setItem('UserData', JSON.stringify(data.data)); // Store other user data
+
         toast.success('Login successful');
-        navigate('/');
-        setError(''); 
+        navigate('/'); // Redirect to homepage
+        setError('');
       } else {
         const errorData = await response.json();
         toast.error(errorData.message || 'Login failed. Please try again.');
@@ -49,14 +52,6 @@ const Login: React.FC = () => {
       toast.error('An unexpected error occurred. Please try again.');
       setError('An unexpected error occurred. Please try again.');
     }
-  };
-
-  const handleGoogleLogin = () => {
-    alert('Google login clicked');
-  };
-
-  const handleFacebookLogin = () => {
-    alert('Facebook login clicked');
   };
 
   return (
@@ -114,28 +109,6 @@ const Login: React.FC = () => {
             </button>
           </div>
         </form>
-
-        <div className="mt-6 flex items-center justify-center">
-          <div className="border-t border-gray-300 w-full"></div>
-          <span className="mx-4 text-gray-500">or</span>
-          <div className="border-t border-gray-300 w-full"></div>
-        </div>
-
-        <div className="mt-6 space-y-4">
-          <button
-            onClick={handleGoogleLogin}
-            className="w-full py-3 bg-red-500 text-white rounded-lg flex items-center justify-center hover:bg-red-600 transition duration-300"
-          >
-            <FaGoogle className="mr-2" /> Login with Google
-          </button>
-
-          <button
-            onClick={handleFacebookLogin}
-            className="w-full py-3 bg-blue-600 text-white rounded-lg flex items-center justify-center hover:bg-blue-700 transition duration-300"
-          >
-            <FaFacebook className="mr-2" /> Login with Facebook
-          </button>
-        </div>
 
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-500">

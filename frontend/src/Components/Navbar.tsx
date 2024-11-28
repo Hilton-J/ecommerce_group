@@ -14,7 +14,7 @@ const Navbar = () => {
       if (!menuOpen) {
           setTimeout(() => {
               setMenuOpen(false);
-          }, 10000); // 10 seconds
+          }, 1000000); 
       }
   };
   useEffect(() => {

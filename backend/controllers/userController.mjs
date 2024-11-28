@@ -2,19 +2,19 @@ import asyncHandler from "express-async-handler";
 import User from "../models/userModel.mjs";
 import generateToken from "../utils/generateToken.mjs";
 
+
+
+
 // @desc    Auth user/set token
 // route    POST /api/users/auth
 // access   public
 export const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
-    
-    generateToken(res, user._id);
-
+    const token = generateToken(res, user._id); // Generate the token (this will set the cookie)
     
     res.status(200).json({
       success: true,
@@ -24,7 +24,7 @@ export const authUser = asyncHandler(async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
-        
+        token // Return the token as part of the response
       }
     });
   } else {
@@ -32,6 +32,9 @@ export const authUser = asyncHandler(async (req, res) => {
     throw new Error('Invalid email or password');
   }
 });
+
+
+
 
 // @desc     Register a new user
 // route    POST /api/users
