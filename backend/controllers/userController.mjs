@@ -15,7 +15,7 @@ export const authUser = asyncHandler(async (req, res) => {
 
   if (user && (await user.matchPassword(password))) {
     const token = generateToken(res, user._id); // Generate the token (this will set the cookie)
-    
+    generateToken(res, user._id);
     res.status(200).json({
       success: true,
       message: 'User logged in successfully',

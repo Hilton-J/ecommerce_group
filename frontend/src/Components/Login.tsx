@@ -31,7 +31,7 @@ const Login: React.FC = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data.data);
+        console.log(data.data.token);
 
         // Store JWT token in localStorage
         localStorage.setItem('token', data.data.token); // Save JWT token

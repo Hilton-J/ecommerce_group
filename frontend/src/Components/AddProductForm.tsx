@@ -79,7 +79,7 @@ const AddProductForm: React.FC = () => {
       const response = await fetch('http://localhost:9000/api/products/', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
+      
           'Content-Type': 'application/json', // Send JSON data
         },
         body: JSON.stringify(data), // Send data as JSON
@@ -160,7 +160,7 @@ const AddProductForm: React.FC = () => {
 
             <form onSubmit={handleSubmit}>
               <div className="space-y-4">
-                {/* Input Fields for Product Name, Price, Category, Description, Image, Stock */}
+             
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700">Product Name</label>
                   <input
@@ -197,6 +197,7 @@ const AddProductForm: React.FC = () => {
                     onChange={handleChange}
                     required
                   >
+                    <option value="">......</option>
                     <option value="Sports">Sports</option>
                     <option value="Electronics">Electronics</option>
                     <option value="Home">Home</option>
