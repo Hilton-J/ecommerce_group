@@ -76,7 +76,7 @@ const MainPage: React.FC = () => {
     <div className="bg-gradient-to-r  min-h-screen py-10">
       <div className="max-w-screen-xl mx-auto flex flex-col md:flex-row justify-between gap-8 p-4">
         {/* Categories Sidebar */}
-        <div className="w-full  bg-white rounded-lg shadow-lg p-6 space-y-6 h-full">
+        <div className="w-1/4  bg-white rounded-lg shadow-lg p-6 space-y-6 h-full">
           <h2 className="text-3xl font-bold text-gray-800">Categories</h2>
           <div className=" flex flex-wrap md:flex-col gap-1 ">
   {['Cars', 'Electronics', 'Entertainment', 'Rent', 'Food', 'Sports', 'Accessories', 'Home'].map((category) => (
