@@ -7,7 +7,7 @@ import {
 import { authorizeRoles, protect } from '../middleware/authMiddleware.mjs';
 const router = express.Router();
 
-router.get('/', protect, authorizeRoles('admin'), getAllUsers);
+router.get('/', getAllUsers);
 router.post('/login', authUser);
 router.post('/register', registerUser);
 router.post('/logout', logoutUser);

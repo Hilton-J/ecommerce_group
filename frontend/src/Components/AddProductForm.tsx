@@ -8,14 +8,14 @@ import { toast } from "react-toastify";
 import { setCredentials } from "../slices/authSlice";
 
 const AddProductForm: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
+  // Individual state variables for each form field
   const [name, setName] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
   const [category, setCategory] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [stock, setStock] = useState<number>(0);
   const [image, setImage] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -71,7 +71,7 @@ const AddProductForm: React.FC = () => {
         category,
         image,
       }).unwrap();
-      dispatch(setCredentials({ ...res }));
+      dispatch(setCredentials({ ...userInfo, ...res }));
       toast.success("Product added successfully!");
       setIsModalOpen(false);
       navigate("/");
@@ -86,6 +86,17 @@ const AddProductForm: React.FC = () => {
 
   // Open the modal
   const openModal = () => setIsModalOpen(true);
+
+  // Close the modal and reset form data
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setName("");
+    setPrice(0);
+    setCategory("");
+    setDescription("");
+    setStock(0);
+    setImage("");
+  };
 
   return (
     <div className='py-2'>
@@ -251,7 +262,7 @@ const AddProductForm: React.FC = () => {
               <div className='mt-6 flex justify-end space-x-4'>
                 <button
                   type='button'
-                  // onClick={closeModal}
+                  onClick={closeModal}
                   className='bg-gray-300 text-gray-700 px-4 py-2 rounded-md'
                 >
                   Cancel
