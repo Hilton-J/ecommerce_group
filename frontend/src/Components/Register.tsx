@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AppDispatch, RootState } from "../store";
+import { useRegisterMutation } from "../slices/userApiSlice";
+import { setCredentials } from "../slices/authSlice";
 
 const Register = () => {
-  const [emailOrPhone, setEmailOrPhone] = useState("");
-  const [Fullname, setFullname] = useState("");
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [userType, setUserType] = useState<"buyer" | "seller">("buyer");
+  const [role, setRole] = useState<"buyer" | "seller">("buyer");
   const [companyName, setCompanyName] = useState("");
   const [companyRegNumber, setCompanyRegNumber] = useState("");
   const [address, setAddress] = useState({
@@ -21,6 +24,17 @@ const Register = () => {
   });
 
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const { userInfo } = useSelector((state: RootState) => state.auth);
+  const [register, { isLoading }] = useRegisterMutation();
+
+  useEffect(() => {
+    if (userInfo) {
+      toast.success(`Welcome, ${userInfo.name}`);
+      navigate("/");
+    }
+  }, [navigate, userInfo]);
+
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
 
   const handleGoogleLogin = () => {
@@ -36,61 +50,18 @@ const Register = () => {
 
     // Basic validations
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
-    if (
-      userType === "seller" &&
-      (!companyName ||
-        !companyRegNumber ||
-        !address.street ||
-        !address.city ||
-        !address.province ||
-        !address.zip)
-    ) {
-      setError("Please fill in all seller fields.");
-      return;
-    }
-
-    const userData = {
-      name: Fullname,
-      email: emailOrPhone,
-      password: password,
-      role: userType,
-    };
-    const sellerData = {
-      name: Fullname,
-      email: emailOrPhone,
-      companyName: companyName,
-      companyRegistration: companyRegNumber,
-      address: address,
-      password: password,
-      role: userType,
-    };
-
-    try {
-      const response = await fetch("http://localhost:9000/api/users/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userType === "buyer" ? userData : sellerData),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        toast.success(data.name || "Registration successful");
-        navigate("/login");
-      } else {
-        const errorData = await response.json();
-        toast.error(
-          errorData.message || "Registration failed. Please try again."
-        );
+      toast.error("Passwords do not match");
+    } else {
+      try {
+        const res = await register({ name, email, password, role }).unwrap();
+        dispatch(setCredentials({ ...res }));
+      } catch (err) {
+        if (err && typeof err === "object" && "data" in err) {
+          toast.error((err as { data: { message: string } }).data.message);
+        } else {
+          toast.error(`An unexpected error occurred: ${err}`);
+        }
       }
-    } catch (error) {
-      console.error("An error occurred:", error);
-      toast.error("An unexpected error occurred. Please try again.");
     }
   };
 
@@ -112,13 +83,7 @@ const Register = () => {
       <div className='bg-white p-8 rounded-lg shadow-lg w-full sm:w-96'>
         <h2 className='text-2xl font-semibold text-center mb-6'>Register</h2>
 
-        {error && (
-          <div className='bg-red-500 text-white p-2 mb-4 text-center rounded'>
-            {error}
-          </div>
-        )}
-
-        {userType === "buyer" && (
+        {role === "buyer" && (
           <div className='mt-6 space-y-4'>
             <button
               onClick={handleGoogleLogin}
@@ -137,15 +102,13 @@ const Register = () => {
 
         <form onSubmit={handleSubmit} className='space-y-4'>
           <div>
-            <label htmlFor='userType' className='block text-sm text-gray-600'>
+            <label htmlFor='role' className='block text-sm text-gray-600'>
               Register as
             </label>
             <select
-              id='userType'
-              value={userType}
-              onChange={(e) =>
-                setUserType(e.target.value as "buyer" | "seller")
-              }
+              id='role'
+              value={role}
+              onChange={(e) => setRole(e.target.value as "buyer" | "seller")}
               className='w-full p-3 border border-gray-300 rounded-lg'
             >
               <option value='buyer'>Customer</option>
@@ -160,31 +123,28 @@ const Register = () => {
             <input
               type='text'
               id='fullName'
-              value={Fullname}
-              onChange={(e) => setFullname(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className='w-full p-3 border border-gray-300 rounded-lg'
               placeholder='Enter your full name'
             />
           </div>
 
           <div>
-            <label
-              htmlFor='emailOrPhone'
-              className='block text-sm text-gray-600'
-            >
+            <label htmlFor='email' className='block text-sm text-gray-600'>
               Email or Phone
             </label>
             <input
               type='text'
-              id='emailOrPhone'
-              value={emailOrPhone}
-              onChange={(e) => setEmailOrPhone(e.target.value)}
+              id='email'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className='w-full p-3 border border-gray-300 rounded-lg'
               placeholder='Enter your email or phone'
             />
           </div>
 
-          {userType === "seller" && (
+          {role === "seller" && (
             <>
               <div>
                 <label
@@ -385,7 +345,7 @@ const Register = () => {
                   placeholder='Enter your zip code'
                 />
               </div>
-
+              {isLoading && <p>Loading...</p>}
               <div className='flex justify-center'>
                 <button
                   type='submit'

@@ -5,6 +5,8 @@ import Footer from "../Components/Footer";
 import SideBar from "../Components/SideBar";
 
 const MainLayout = () => {
+
+  
   return (
     <section className='grid grid-cols-16'>
       <Navbar />

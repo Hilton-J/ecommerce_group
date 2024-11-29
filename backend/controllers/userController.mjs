@@ -29,9 +29,6 @@ export const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-
-
-
 // @desc     Register a new user
 // route    POST /api/users
 // @access   Public
@@ -67,17 +64,13 @@ export const registerUser = asyncHandler(async (req, res) => {
 
 
     res.status(201).json({
-      success: true,
-      message: "User registered successfully",
-      data: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        companyName: user.companyName,
-        companyRegistration: user.companyRegistration,
-        address: user.address
-      }
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      companyName: user.companyName,
+      companyRegistration: user.companyRegistration,
+      address: user.address
     });
   } else {
     res.status(400);

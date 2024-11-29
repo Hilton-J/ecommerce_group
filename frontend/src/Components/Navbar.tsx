@@ -9,57 +9,6 @@ import { useLogoutMutation } from "../slices/userApiSlice";
 import { logout } from "../slices/authSlice";
 
 const Navbar = () => {
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
-  // const navigate = useNavigate();
-  // const userId = localStorage.getItem("_id");
-  // const [menuOpen, setMenuOpen] = useState(false);
-
-  // const toggleMenu = () => {
-  //   setMenuOpen(!menuOpen);
-  //   if (!menuOpen) {
-  //     setTimeout(() => {
-  //       setMenuOpen(false);
-  //     }, 1000000);
-  //   }
-  // };
-  // useEffect(() => {
-  //   if (userId) {
-  //     setIsLoggedIn(true);
-  //   } else {
-  //     setIsLoggedIn(false);
-  //   }
-  // }, [userId]);
-
-  // const handleLogout = async () => {
-  //   try {
-  //     const response = await fetch("http://localhost:9000/api/users/logout", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       credentials: "include",
-  //     });
-
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       toast.success(data.message);
-  //       localStorage.removeItem("_id");
-  //       localStorage.removeItem("role");
-
-  //       setIsLoggedIn(false);
-
-  //       navigate("/");
-  //     } else {
-  //       const errorData = await response.json();
-  //       toast.error(errorData.message || "Logout failed. Please try again.");
-  //     }
-  //   } catch (error) {
-  //     console.error("An error occurred:", error);
-  //     toast.error("An unexpected error occurred. Please try again.");
-  //   }
-  // };
-  // localStorage.getItem("role"); //seller or admin
-
   const { userInfo } = useSelector((state: RootState) => state.auth);
 
   const dispatch = useDispatch<AppDispatch>();

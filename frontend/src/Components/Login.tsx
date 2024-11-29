@@ -18,7 +18,6 @@ const Login: React.FC = () => {
   const [login, { isLoading }] = useLoginMutation();
   const { userInfo } = useSelector((state: RootState) => state.auth);
 
-  console.log(userInfo);
   useEffect(() => {
     if (userInfo) {
       navigate("/");

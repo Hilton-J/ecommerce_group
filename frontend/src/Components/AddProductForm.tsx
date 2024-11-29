@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { AppDispatch, RootState } from "../store";
-// import { IProduct } from "../interfaces/product";
+import { RootState } from "../store";
 import { useCreateProductMutation } from "../slices/productApiSlice";
 import { toast } from "react-toastify";
-import { setCredentials } from "../slices/authSlice";
 
 const AddProductForm: React.FC = () => {
   // Individual state variables for each form field
@@ -18,7 +16,7 @@ const AddProductForm: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
+  // const dispatch = useDispatch<AppDispatch>();
   const { userInfo } = useSelector((state: RootState) => state.auth);
   const [addProduct, { isLoading }] = useCreateProductMutation();
 
@@ -39,7 +37,6 @@ const AddProductForm: React.FC = () => {
       reader.onload = () => {
         const result = reader.result as string;
         setImage(result);
-        // console.log("File converted to base64:", result);
       };
 
       reader.onerror = (error) => {
@@ -63,7 +60,7 @@ const AddProductForm: React.FC = () => {
     }
 
     try {
-      const res = await addProduct({
+      await addProduct({
         name,
         description,
         price,
@@ -71,7 +68,6 @@ const AddProductForm: React.FC = () => {
         category,
         image,
       }).unwrap();
-      dispatch(setCredentials({ ...userInfo, ...res }));
       toast.success("Product added successfully!");
       setIsModalOpen(false);
       navigate("/");
