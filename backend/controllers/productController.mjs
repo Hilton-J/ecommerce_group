@@ -1,11 +1,13 @@
 import asyncHandler from 'express-async-handler';
 import Product from '../models/productModel.mjs';
+import mongoose from 'mongoose';
 
 // @dsc     Add new Product
 // route    POST /api/products
 // @access  Private
 export const addProduct = asyncHandler(async (req, res) => {
   const { name, description, price, stock, category, image } = req.body;
+  const userId = req.user._id;
 
   const product = await Product.create({
     name,
@@ -14,7 +16,7 @@ export const addProduct = asyncHandler(async (req, res) => {
     stock,
     category,
     image,
-    seller: req.user._id,
+    seller: userId,
   });
 
   if (product) {
@@ -101,6 +103,8 @@ export const getAllProducts = asyncHandler(async (req, res) => {
 // @access  Private
 export const getSellerProducts = asyncHandler(async (req, res) => {
   const { seller } = req.body;
+  console.log(seller);
+
   const page = Number(req.query.page) || 1;
   const limit = 20;
   const skip = (page - 1) * limit;

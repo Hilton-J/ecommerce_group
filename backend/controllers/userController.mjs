@@ -46,12 +46,10 @@ export const registerUser = asyncHandler(async (req, res) => {
     throw new Error('User already exists');
   }
 
-
-  if (role === 'seller' && (!companyName || !companyRegistration || !address)) {
-    res.status(400);
-    throw new Error('Please provide all required seller fields.');
-  }
-
+  // if (role === 'seller' && (!companyName || !companyRegistration || !address)) {
+  //   res.status(400);
+  //   throw new Error('Please provide all required seller fields.');
+  // }
 
   const user = await User.create({
     name,
