@@ -1,11 +1,9 @@
 import asyncHandler from 'express-async-handler';
 import Product from '../models/productModel.mjs';
-import mongoose from 'mongoose';
 
 // @dsc     Add new Product
 // route    POST /api/products
 // @access  Private
-
 export const addProduct = asyncHandler(async (req, res) => {
   const { name, description, price, stock, category, image } = req.body;
   const userId = req.user._id;
