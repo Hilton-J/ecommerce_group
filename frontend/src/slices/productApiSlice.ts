@@ -1,19 +1,18 @@
-import { IProduct } from "../interfaces/product";
+import { IProduct, Products } from "../interfaces/product";
 import { apiSlice } from "./apiSlice";
-// import { ObjectId } from "mongodb";
-
-export interface Product {
-  products: IProduct[];
-  page: number;
-  pages: number;
-  totalProducts: number;
-}
 
 const PRODUCT_URL = "/api/products";
 
 export const productsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    createProduct: builder.mutation({
+    createProduct: builder.mutation<
+      {
+        success: boolean;
+        message: string;
+        product: IProduct;
+      },
+      Partial<IProduct>
+    >({
       query: (data) => ({
         url: `${PRODUCT_URL}`,
         method: "POST",
@@ -21,21 +20,35 @@ export const productsApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-    getAllProduct: builder.query<Product , void>({
-      query: () => `${PRODUCT_URL}`,
+    getAllProduct: builder.query<Products, { page?: number }>({
+      query: ({ page = 1 }) => `${PRODUCT_URL}?page=${page}`,
     }),
 
-    updateProduct: builder.mutation({
+    updateProduct: builder.mutation<
+      {
+        success: boolean;
+        message: string;
+        product: IProduct;
+      },
+      { id: string; data: Partial<IProduct> }
+    >({
       query: ({ id, data }) => ({
         url: `${PRODUCT_URL}/${id}`,
         method: "PUT",
         data: data,
       }),
     }),
-    getProductBySeller: builder.query({
-      query: () => `${PRODUCT_URL}/seller`,
+    getProductBySeller: builder.query<Products, { page?: number }>({
+      query: ({ page = 1 }) => `${PRODUCT_URL}/seller?page=${page}`,
     }),
-    deleteProduct: builder.mutation({
+    deleteProduct: builder.mutation<
+      {
+        success: boolean;
+        message: string;
+        data: IProduct;
+      },
+      string
+    >({
       query: (id) => ({
         url: `${PRODUCT_URL}/${id}`,
         method: "DELETE",

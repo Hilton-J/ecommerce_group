@@ -2,7 +2,7 @@ import { Table } from "flowbite-react";
 
 const ListProducts = () => {
   return (
-    <div className='overflow-x-auto'>
+    <div className='overflow-x-auto border '>
       <Table hoverable>
         <Table.Head>
           <Table.HeadCell>Product name</Table.HeadCell>

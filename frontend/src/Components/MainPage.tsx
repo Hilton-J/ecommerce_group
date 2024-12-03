@@ -1,45 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import like from "../assets/like.png";
 import notlike from "../assets/notlike.png";
-import { useGetAllProductQuery } from "../slices/productApiSlice";
-// import { IProduct } from "../interfaces/product";
-
-// // Define types for product and user data
-// interface Product {
-//   _id: string;
-//   image: string;
-//   price: number;
-//   description: string;
-//   seller: string; // Assuming each product has a userId linking to a user
-// }
-
-interface Address {
-  city: string;
-  province: string;
-  street: string;
-  zip: string;
-}
-
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-  address?: Address;
-  companyName: string;
-  companyRegistration: string;
-  role: string;
-}
+import { useGetProductBySellerQuery } from "../slices/productApiSlice";
 
 const MainPage: React.FC = () => {
   // State to manage likes for each product
   const [likes, setLikes] = useState<{ [key: string]: boolean }>({});
-  //const [products, setProducts] = useState<Product[]>([]); // Default state is an empty array
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  // const [users, setUsers] = useState<User[]>([]);
 
-  const [users, setUsers] = useState<User[]>([]);
-
-  const { data: products, isLoading } = useGetAllProductQuery();
-  console.log(products);
+  const { data: products, isLoading } = useGetProductBySellerQuery({
+    page: currentPage,
+  });
 
   // Function to handle the like toggle for a product
   const handleLikeToggle = (productId: string) => {
@@ -49,33 +22,13 @@ const MainPage: React.FC = () => {
     }));
   };
 
-  // Fetch products from the API
-  // const getProducts = async () => {
-  //   try {
-  //     const response = await fetch("http://localhost:9000/api/products/");
-  //     const data = await response.json();
-  //     setProducts(data.products); // Adjust if API response differs
-  //   } catch (error) {
-  //     console.error("Error fetching products:", error);
-  //   }
-  // };
-
-  // Fetch users from the API
-  const getUsers = async () => {
-    try {
-      const response = await fetch("http://localhost:9000/api/users/");
-      const data = await response.json();
-      setUsers(data.users); // Adjust if API response differs
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
+  // TODO: Implement pagination
+  // Function to handle pagination
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
-  // Fetch data on component mount
-  useEffect(() => {
-    // getProducts();
-    getUsers();
-  }, []);
+  handlePageChange(1);
 
   return (
     <div className='bg-gray-50 min-h-screen flex justify-center items-start py-10'>
@@ -141,7 +94,7 @@ const MainPage: React.FC = () => {
                 </div>
                 <div className='px-4 py-2 bg-gray-100'>
                   {/* Check if users is defined before mapping */}
-                  {users?.map((user) => {
+                  {/* {users?.map((user) => {
                     if (p.seller === user._id) {
                       return (
                         <div key={user._id} className='text-sm text-gray-500'>
@@ -156,7 +109,7 @@ const MainPage: React.FC = () => {
                       );
                     }
                     return null;
-                  })}
+                  })} */}
                 </div>
               </div>
             ))

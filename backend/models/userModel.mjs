@@ -33,7 +33,6 @@ userSchema.path('companyRegistration').validate(function (value) {
   }
 });
 
-
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
@@ -47,7 +46,6 @@ userSchema.pre('save', async function (next) {
     next(error);
   }
 });
-
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);

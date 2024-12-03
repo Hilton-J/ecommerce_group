@@ -1,10 +1,17 @@
 export interface IProduct {
   _id: string;
   name: string;
-  price: number;
-  category: string;
   description: string;
+  price: number;
   stock: number;
-  image: File | null;
+  category: string;
+  image: string[];
   seller: string;
+}
+
+export interface Products {
+  products: IProduct[];
+  page: number;
+  pages: number;
+  totalProducts: number;
 }

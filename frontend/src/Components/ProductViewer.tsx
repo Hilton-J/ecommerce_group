@@ -1,4 +1,3 @@
-import React from 'react';
 import headphone from '../assets/headphone.jpg';
 
 const ProductViewer = () => {

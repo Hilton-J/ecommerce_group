@@ -42,7 +42,7 @@ const SideBar = () => {
               </Sidebar.Item>
             )}
             <Sidebar.Item
-              href='#'
+              href='/products'
               className='hover:bg-blue-600 hover:text-white'
             >
               Products
