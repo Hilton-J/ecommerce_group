@@ -8,7 +8,7 @@ const MainLayout = () => {
 
   
   return (
-    <section className='grid grid-cols-16'>
+    <section className='grid grid-cols-16 gap-5'>
       <Navbar />
       <SideBar />
       <main className='min-h-screen col-start-3 col-span-full'>

@@ -13,7 +13,7 @@ export interface userResponse {
   name: string;
   email: string;
   role: string;
-  token: string;
+  // token: string;
 }
 
 export interface RegisterRequest {

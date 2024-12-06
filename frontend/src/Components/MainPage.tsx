@@ -7,11 +7,11 @@ import { useGetProductBySellerQuery } from "../slices/productApiSlice";
 const MainPage: React.FC = () => {
   // State to manage likes for each product
   const [likes, setLikes] = useState<{ [key: string]: boolean }>({});
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  // const [currentPage, setCurrentPage] = useState<number>(1);
   // const [users, setUsers] = useState<User[]>([]);
 
-  const { data: products, isLoading } = useGetProductBySellerQuery({
-    page: currentPage,
+  const { data, isLoading } = useGetProductBySellerQuery({
+    page: 1,
   });
 
   // Function to handle the like toggle for a product
@@ -22,13 +22,18 @@ const MainPage: React.FC = () => {
     }));
   };
 
-  // TODO: Implement pagination
-  // Function to handle pagination
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+  // useEffect(() => {
 
-  handlePageChange(1);
+  // }, [currentPage]);
+
+  // TODO:Implement pagination
+  // Function to handle pagination
+  // const handlePageChange = (page: number) => {
+  //   page = 1;
+  //   setCurrentPage(page);
+  // };
+
+  // handlePageChange(1);
 
   return (
     <div className='bg-gray-50 min-h-screen flex justify-center items-start py-10'>
@@ -60,13 +65,13 @@ const MainPage: React.FC = () => {
 
         {/* Products Display */}
         <div className='w-full lg:w-3/4 flex flex-wrap gap-8 justify-center'>
-          {products && products.products.length === 0 ? (
+          {data && data.products.length === 0 ? (
             <p className='text-lg font-semibold text-gray-800'>
               No products available
             </p>
           ) : (
-            products &&
-            products.products.map((p) => (
+            data &&
+            data.products.map((p) => (
               <div
                 key={p._id}
                 className='w-full sm:w-72 md:w-80 lg:w-72 bg-white rounded-lg shadow-md overflow-hidden'

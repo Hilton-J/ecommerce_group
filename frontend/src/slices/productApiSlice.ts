@@ -38,9 +38,11 @@ export const productsApiSlice = apiSlice.injectEndpoints({
         data: data,
       }),
     }),
+
     getProductBySeller: builder.query<Products, { page?: number }>({
       query: ({ page = 1 }) => `${PRODUCT_URL}/seller?page=${page}`,
     }),
+
     deleteProduct: builder.mutation<
       {
         success: boolean;
@@ -61,6 +63,6 @@ export const {
   useCreateProductMutation,
   useGetAllProductQuery,
   useUpdateProductMutation,
-  useGetProductBySellerQuery,
+  useGetProductBySellerQuery, 
   useDeleteProductMutation,
 } = productsApiSlice;

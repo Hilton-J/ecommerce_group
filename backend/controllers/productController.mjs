@@ -79,6 +79,10 @@ export const getAllProducts = asyncHandler(async (req, res) => {
   const skip = (page - 1) * limit;
 
   const products = await Product.find({})
+    .populate({
+      path: "seller",
+      select: "name companyName address",
+    })
     .skip(skip)
     .limit(limit);
 

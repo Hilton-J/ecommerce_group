@@ -18,6 +18,9 @@ function App() {
           <Routes>
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
+
+            
+            //PRivate Routes
             <Route path='' element={<PrivateRoute />}>
               <Route path='/' element={<MainLayout />}>
                 <Route index element={<MainPage />} />

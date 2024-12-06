@@ -24,6 +24,7 @@ const Register = () => {
   });
 
   const navigate = useNavigate();
+  
   const dispatch = useDispatch<AppDispatch>();
   const { userInfo } = useSelector((state: RootState) => state.auth);
   const [register, { isLoading }] = useRegisterMutation();

@@ -1,12 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-// import { ObjectId } from "mongodb";
 
 interface UserInfo {
   id: string;
   name: string;
   email: string;
   role: string;
-  token: string;
 }
 
 export interface AuthState {
