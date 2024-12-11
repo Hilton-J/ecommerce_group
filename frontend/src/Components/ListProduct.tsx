@@ -10,7 +10,7 @@ const ListProducts = () => {
 
   useEffect(() => {
     if (data?.products) setProducts(data.products);
-  }, [products, data]);
+  }, [data]);
 
   return (
     <div className='overflow-x-auto h-full'>
