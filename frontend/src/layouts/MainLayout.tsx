@@ -4,9 +4,7 @@ import { ToastContainer } from "react-toastify";
 import Footer from "../Components/Footer";
 import SideBar from "../Components/SideBar";
 
-const MainLayout = () => {
-
-  
+const MainLayout = () => {  
   return (
     <section className='grid grid-cols-16 gap-5'>
       <Navbar />

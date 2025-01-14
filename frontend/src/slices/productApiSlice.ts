@@ -18,10 +18,12 @@ export const productsApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Product"],
     }),
 
     getAllProduct: builder.query<Products, { page?: number }>({
       query: ({ page = 1 }) => `${PRODUCT_URL}?page=${page}`,
+      providesTags: ["Product"],
     }),
 
     updateProduct: builder.mutation<
@@ -37,10 +39,12 @@ export const productsApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
         data: data,
       }),
+      invalidatesTags: ["Product"],
     }),
 
     getProductBySeller: builder.query<Products, { page?: number }>({
       query: ({ page = 1 }) => `${PRODUCT_URL}/seller?page=${page}`,
+      providesTags: ["Product"],
     }),
 
     deleteProduct: builder.mutation<
@@ -55,6 +59,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
         url: `${PRODUCT_URL}/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Product"],
     }),
   }),
 });
@@ -63,6 +68,6 @@ export const {
   useCreateProductMutation,
   useGetAllProductQuery,
   useUpdateProductMutation,
-  useGetProductBySellerQuery, 
+  useGetProductBySellerQuery,
   useDeleteProductMutation,
 } = productsApiSlice;
