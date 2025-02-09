@@ -14,6 +14,7 @@ const MainPage: React.FC = () => {
     page: 1,
   });
 
+  console.log(data);
   // Function to handle the like toggle for a product
   const handleLikeToggle = (productId: string) => {
     setLikes((prevLikes) => ({
