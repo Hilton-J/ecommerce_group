@@ -6,7 +6,7 @@ import SpinnerComponent from "./SpinnerComponent";
 
 const ListProducts = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
-  const { data, isLoading } = useGetProductBySellerQuery({ page: 1 });
+  const { data, isLoading } = useGetProductBySellerQuery(1);
 
   useEffect(() => {
     if (data?.products) setProducts(data.products);

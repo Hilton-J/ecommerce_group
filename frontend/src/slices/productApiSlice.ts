@@ -21,8 +21,8 @@ export const productsApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ["Product"],
     }),
 
-    getAllProduct: builder.query<Products, { page?: number }>({
-      query: ({ page = 1 }) => `${PRODUCT_URL}?page=${page}`,
+    getAllProduct: builder.query<Products, number>({
+      query: (page) => `${PRODUCT_URL}?page=${page}`,
       providesTags: ["Product"],
     }),
 
